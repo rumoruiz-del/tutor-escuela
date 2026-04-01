@@ -8,11 +8,8 @@
         body { font-family: sans-serif; background:#f1f5f9; margin:0; display:flex; flex-direction:column; height:100vh; overflow:hidden; }
         #header { background:#004aad; color:white; padding:10px; display:flex; justify-content:space-between; align-items:center; }
         #header h1 { font-size:14px; margin:0; text-transform:uppercase; }
-        #tabs { display:flex; background:white; border-bottom:1px solid #ddd; }
-        .tab { flex:1; padding:12px; border:none; background:none; font-weight:bold; color:#666; cursor:pointer; font-size:11px; }
-        .tab.active { color:#004aad; border-bottom:3px solid #fbbf24; }
         #chat-msgs { flex:1; overflow-y:auto; padding:15px; display:flex; flex-direction:column; gap:10px; }
-        .bt { background:white; padding:12px; border-radius:15px 15px 15px 2px; align-self:flex-start; max-width:85%; box-shadow:0 2px 4px rgba(0,0,0,0.1); font-size:14px; line-height:1.6; }
+        .bt { background:white; padding:12px; border-radius:15px 15px 15px 2px; align-self:flex-start; max-width:85%; box-shadow:0 2px 4px rgba(0,0,0,0.1); font-size:14px; }
         .bu { background:#004aad; color:white; padding:10px; border-radius:15px 15px 2px 15px; align-self:flex-end; max-width:80%; font-size:14px; }
         #inp-area { background:white; padding:10px; display:flex; gap:10px; border-top:1px solid #ddd; }
         #uinput { flex:1; padding:12px; border:1px solid #ccc; border-radius:8px; outline:none; }
@@ -28,13 +25,6 @@
         <button style="background:#ef4444; color:white; border:none; padding:5px; border-radius:4px;" onclick="location.reload()">Reiniciar</button>
     </div>
 
-    <div id="tabs">
-        <button class="tab active">CHAT</button>
-        <button class="tab">LIBRO</button>
-        <button class="tab">QUIZ</button>
-        <button class="tab">REPORTE</button>
-    </div>
-
     <div id="chat-msgs">
         <div class="bt">hola soy tu profesor virtual y hoy aprenderemos cosas interesantes ¿que materia o tema quieres estudiar?</div>
     </div>
@@ -45,7 +35,7 @@
     </div>
 
     <script>
-        const API_KEY = "AIzaSyC_S2uaSAiulXCaEnoBbUHc1-CrgcumQg4"; // <--- PEGA TU LLAVE DE GEMINI AQUÍ
+        const API_KEY = "AIzaSyC_S2uaSAiulXCaEnoBbUHc1-CrgcumQg4"; 
 
         async function enviar() {
             const input = document.getElementById('uinput');
@@ -61,7 +51,7 @@
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
-                        contents: [{ parts: [{ text: `Eres un maestro de Telesecundaria. Responde de forma EXTENSA, en párrafos largos y SIN listas numeradas (1, 2, 3). No uses asteriscos ni negritas raras. Tema: ${m}` }] }]
+                        contents: [{ parts: [{ text: `Eres un maestro de Telesecundaria. Responde de forma EXTENSA, en párrafos largos y SIN listas numeradas. Tema: ${m}` }] }]
                     })
                 });
                 const data = await res.json();
@@ -69,7 +59,7 @@
                 msgs.innerHTML += `<div class="bt">${txt}</div>`;
                 msgs.scrollTop = msgs.scrollHeight;
             } catch (e) {
-                msgs.innerHTML += `<div class="bt">Error de conexión. Maestro, revise su API Key en el código.</div>`;
+                msgs.innerHTML += `<div class="bt">Error de conexión. Intenta de nuevo.</div>`;
             }
         }
     </script>
