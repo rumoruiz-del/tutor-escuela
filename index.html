@@ -9,7 +9,7 @@
         #header { background:#004aad; color:white; padding:10px; display:flex; justify-content:space-between; align-items:center; }
         #header h1 { font-size:14px; margin:0; text-transform:uppercase; }
         #chat-msgs { flex:1; overflow-y:auto; padding:15px; display:flex; flex-direction:column; gap:10px; }
-        .bt { background:white; padding:12px; border-radius:15px 15px 15px 2px; align-self:flex-start; max-width:85%; box-shadow:0 2px 4px rgba(0,0,0,0.1); font-size:14px; }
+        .bt { background:white; padding:12px; border-radius:15px 15px 15px 2px; align-self:flex-start; max-width:85%; box-shadow:0 2px 4px rgba(0,0,0,0.1); font-size:14px; line-height:1.6; }
         .bu { background:#004aad; color:white; padding:10px; border-radius:15px 15px 2px 15px; align-self:flex-end; max-width:80%; font-size:14px; }
         #inp-area { background:white; padding:10px; display:flex; gap:10px; border-top:1px solid #ddd; }
         #uinput { flex:1; padding:12px; border:1px solid #ccc; border-radius:8px; outline:none; }
@@ -35,7 +35,7 @@
     </div>
 
     <script>
-        const API_KEY = "AIzaSyC_S2uaSAiulXCaEnoBbUHc1-CrgcumQg4"; 
+        const API_KEY = "AIzaSyC_S2uaSAiulXCaEnoBbUHc1-CrgcumQg4";
 
         async function enviar() {
             const input = document.getElementById('uinput');
@@ -47,20 +47,32 @@
             input.value = "";
 
             try {
+                // Usamos la URL directa de Gemini 1.5 Flash
                 const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
-                        contents: [{ parts: [{ text: `Eres un maestro de Telesecundaria. Responde de forma EXTENSA, en párrafos largos y SIN listas numeradas. Tema: ${m}` }] }]
+                        contents: [{ parts: [{ text: `Eres un maestro de Telesecundaria. Responde de forma EXTENSA, en párrafos largos y SIN listas numeradas (1, 2, 3). No uses asteriscos ni negritas raras. Tema: ${m}` }] }]
                     })
                 });
+
                 const data = await res.json();
-                const txt = data.candidates[0].content.parts[0].text;
-                msgs.innerHTML += `<div class="bt">${txt}</div>`;
+                
+                if (data.error) {
+                    msgs.innerHTML += `<div class="bt">Error de la API: ${data.error.message}</div>`;
+                } else {
+                    const txt = data.candidates[0].content.parts[0].text;
+                    msgs.innerHTML += `<div class="bt">${txt}</div>`;
+                }
+                
                 msgs.scrollTop = msgs.scrollHeight;
             } catch (e) {
-                msgs.innerHTML += `<div class="bt">Error de conexión. Intenta de nuevo.</div>`;
+                msgs.innerHTML += `<div class="bt">Error de conexión. Maestro, revise su conexión a internet.</div>`;
             }
+        }
+    </script>
+</body>
+</html>
         }
     </script>
 </body>
